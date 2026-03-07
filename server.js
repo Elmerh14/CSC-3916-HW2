@@ -13,6 +13,7 @@ var authJwtController = require('./auth_jwt');
 db = require('./db')(); //hack
 var jwt = require('jsonwebtoken');
 var cors = require('cors');
+const { env } = require('process');
 
 var app = express();
 app.use(cors());
@@ -77,13 +78,17 @@ router.route('/movies')
     // Implementation here
     const o = getJSONObjectForMovieRequirement(req);
     o.status = 200;
-    o.message = 'GET movies';
-    o.headers = req.headers;
+    o.message = "GET movies";
+    o.query = req.query;
     res.json(o);
-
   })
   .post((req, res) => {
     // Implementation here
+    const o = getJSONObjectForMovieRequirement(req);
+    o.status = 200;
+    o.message = "movie saved";
+    o.query = req.query;
+    res.json(o);
   })
   .put(authJwtController.isAuthenticated, (req, res) => {
     // HTTP PUT Method
@@ -92,6 +97,7 @@ router.route('/movies')
     var o = getJSONObjectForMovieRequirement(req);
     o.status = 200;
     o.message = "movie updated";
+    o.query = req.query;
     res.json(o);
   })
   .delete(authController.isAuthenticated, (req, res) => {
@@ -101,6 +107,7 @@ router.route('/movies')
     var o = getJSONObjectForMovieRequirement(req);
     o.status = 200;
     o.message = "movie deleted";
+    o.query = req.query;
     res.json(o);
   })
   .all((req, res) => {
